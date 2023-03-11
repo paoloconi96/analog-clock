@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title>orologio analogico v1.1</title>
+
+		<style> 
+			#miocanvas { 
+				background: url("img/orologioD.jpg"); 
+				width: 400px;
+				display: block;
+				margin: auto;
+				margin-bottom: 30px;
+			}
+			body {
+				width: 1000px;
+				margin: auto;
+				margin-top: 30px;
+			}
+			h1 {
+				text-align: center;
+			}
+			#footer {
+				width: 1000px;
+				border-top: 1px dotted #999;
+				padding-top: 10px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<h1>Orologio binario v1.1</h1>
+		<script type="text/javascript">
+
+			//creo il canvas e ne imposto le proprietà basilari
+			var canvas = document.createElement("canvas");
+			canvas.width = 400;
+			canvas.height = 400;
+			var ctx = canvas.getContext("2d"),
+				counter = 0,
+				//imposto il valore del trasformatore in radianti
+				trasformer = Math.PI/180;
+			canvas.setAttribute("id", "miocanvas");
+			document.body.appendChild(canvas);
+
+			//creo un immagine e la collego con quella della lancetta dell"orologio
+			//secondi
+			var lancettaS = new Image();
+			lancettaS.src = "img/lancetta.png";
+			//minuti
+			var lancettaM = new Image();
+			lancettaM.src = "img/lancetta.png";
+			//ore
+			var lancettaO = new Image();
+			lancettaO.src = "img/lancetta.png";
+
+			//imposto l"intervallo di tempo ogni quanto deve eseguirsi la funzione
+			setInterval(loop, 1000);
+			
+			//pulisce il canvas e richiama la funzione che disegna
+			function loop() {
+				ctx.clearRect(0,0,400,400);
+				drawRotatedImage(lancettaS,lancettaM,lancettaO,200,200,counter);
+				counter+=6;
+			}
+
+			//disegna le lancette e le fa muovere secondo il tempo attuale
+			function drawRotatedImage(imageS, imageM, imageO, x, y, angle) {
+			
+			//gestisce la lancetta dei secondi
+			angle = angle + 270;
+			ctx.save();
+			ctx.translate(x, y);
+			ctx.rotate(angle * trasformer);
+			ctx.drawImage(imageS,0,-5,170,10);
+			ctx.restore();
+			angle = angle-270;
+
+			//gestisce la lancetta dei minuti
+			angle = (angle + 16200) / 60;
+			ctx.save();
+			ctx.translate(x, y);
+			ctx.rotate(angle * trasformer);
+			ctx.drawImage(imageS,0,-8,150,15);
+			ctx.restore();
+			angle = (angle * 60) - 16200;
+
+			//gestisce la lancetta dei hours
+			angle = (angle + 972000) / 720;
+			ctx.save();
+			ctx.translate(x, y);
+			ctx.rotate(angle * trasformer);
+			ctx.drawImage(imageO,0,-11,120,20);
+			ctx.restore();
+
+			}
+			
+		</script>
+		<div id="footer">&copy; 2013 - Paolo Conizzoli</div>
+	</body>
+</html>
